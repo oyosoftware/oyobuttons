@@ -28,7 +28,7 @@
   <li>Function for creating SVG content elements.</li>
   <li>Function for creating radial gradients.</li>
   <li>Colors can be changed.</li>
-  <li>Buttons cabe scaled without losing space.</li>
+  <li>Buttons can be scaled without losing space.</li>
 </ul>
 <h2>Contact</h2>
 <ul>
