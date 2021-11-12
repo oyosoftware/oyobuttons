@@ -3,7 +3,7 @@
   <img src="http://oyoweb.nl/music/plugins/oyobuttons/oyobuttons.jpg" alt="oyobuttons">
 </a>
 <p>Buttons Component</p>
-<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;currency_code=EUR&amp;business=software@oyoweb.nl&amp;item_name=donation%20for%20Hello%20World" rel="nofollow">
+<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;currency_code=EUR&amp;business=software@oyoweb.nl&amp;item_name=donation%20for%20oyobuttons" rel="nofollow">
   <img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" alt="Donate via PayPal" style="max-width: 100%;vertical-align: top">
 </a>
 <div>
