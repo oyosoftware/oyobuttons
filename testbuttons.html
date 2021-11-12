@@ -1,0 +1,345 @@
+<html>
+
+    <head>
+        <title>oYoButtons</title>
+        <script src="https://code.jquery.com/jquery-3.4.0.js"></script>
+        <script src="oyobuttons.js"></script>
+        <link rel="stylesheet" href="oyobuttons.css">
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+            .wrapper {
+                width: 700px;
+                position: relative;
+            }
+            .panel {
+                width: 656px;
+                height: 78px;
+                background-color: black;
+                padding: 8px;
+                overflow: hidden;
+            }
+            .notification {
+                display: none;
+                margin: auto;
+                position: relative;
+                top: 25px;
+                width: 200px;
+                height: 65px;
+                text-align: center;
+                padding: 4px;
+                border: 1px solid black;
+                border-radius: 10px;
+            }
+            .text {
+                position: relative;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+        </style>
+    </head>
+
+    <body>
+        <script>
+
+            $(document).ready(function () {
+
+                // Button Control
+
+                makeButtons();
+
+                $(play).on("click", oyoPlayButtonClick);
+                $(pause).on("click", oyoPauseButtonClick);
+                $(playpause).on("click", oyoPlayPauseButtonClick);
+                $(stop).on("click", oyoStopButtonClick);
+                $(previous).on("click", oyoPreviousButtonClick);
+                $(next).on("click", oyoNextButtonClick);
+                $(record).on("click", oyoRecordButtonClick);
+                $(speaker).on("click", oyoSpeakerButtonClick);
+                $(empty).on("click", oyoEmptyButtonClick);
+
+                counter = 1;
+                pause.disable();
+                stop.disable();
+                previous.disable();
+                $(".text").html("Push Play to start");
+                $(".notification").slideDown(1000).fadeOut(5000);
+
+                // Event for play button
+                function oyoPlayButtonClick(event) {
+                    playpause.changeState();
+                    play.disable();
+                    pause.enable();
+                    stop.enable();
+                }
+
+                // Event for pause button
+                function oyoPauseButtonClick(event) {
+                    if (record.state === 1) {
+                        pause.disable();
+                        $(".notification").finish();
+                        $(".text").html("Recording paused<br/>Push Record to continue<br/>or Stop to stop recording");
+                        $(".notification").css("display", "block");
+                        $(".notification").slideDown(1000).fadeOut(5000);
+                    } else {
+                        playpause.changeState();
+                        play.enable();
+                        pause.disable();
+                        $(".notification").finish();
+                        $(".text").html("Push Play to start");
+                        $(".notification").slideDown(1000).fadeOut(5000);
+                    }
+                }
+
+                // Event for play/pause button
+                function oyoPlayPauseButtonClick(event) {
+                    if (playpause.state === 0) {
+                        play.enable();
+                        pause.disable();
+                        $(".notification").finish();
+                        $(".text").html("Push Play to start");
+                        $(".notification").slideDown(1000).fadeOut(5000);
+                    } else {
+                        play.disable();
+                        pause.enable();
+                        stop.enable();
+                    }
+                    initPrevNext();
+                }
+
+                // Event for stop button
+                function oyoStopButtonClick(event) {
+                    if (record.state === 0) {
+                        $(".notification").finish();
+                        $(".text").html("Push Play to start");
+                        $(".notification").slideDown(1000).fadeOut(5000);
+                    } else {
+                        record.changeState();
+                        $(".notification").finish();
+                        $(".text").html("Recording stopped<br/>Push Play to start");
+                        $(".notification").slideDown(1000).fadeOut(5000);
+                    }
+                    if (playpause.state === 1) {
+                        playpause.changeState();
+                    }
+                    play.disable();
+                    pause.disable();
+                    playpause.enable();
+                    stop.disable();
+                    previous.disable();
+                    next.disable();
+                }
+
+                // Event for previous button
+                function oyoPreviousButtonClick() {
+                    if (counter > 1)
+                        counter -= 1;
+                    initPrevNext();
+                }
+
+                // Event for next button
+                function oyoNextButtonClick() {
+                    if (counter < 3)
+                        counter += 1;
+                    initPrevNext();
+                }
+
+                // Event for record button
+                function oyoRecordButtonClick(event) {
+                    if (record.state === 0) {
+                        if (pause.disabled) {
+                            record.changeState();
+                            pause.enable();
+                            $(".notification").finish();
+                            $(".text").html("Recording");
+                            $(".notification").slideDown(1000).fadeOut(5000);
+                        } else {
+                            pause.disable();
+                            playpause.enable();
+                            stop.disable();
+                            $(".notification").finish();
+                            $(".text").html("Recording stopped<br/>Push Play to start");
+                            $(".notification").slideDown(1000).fadeOut(5000);
+                        }
+                    } else {
+                        if (playpause.state === 1)
+                            playpause.changeState();
+                        play.disable();
+                        pause.enable();
+                        playpause.disable();
+                        stop.enable();
+                        previous.disable();
+                        next.disable();
+                        $(".notification").finish();
+                        $(".text").html("Recording");
+                        $(".notification").slideDown(1000).fadeOut(5000);
+                    }
+                }
+
+                // Event for mute speaker
+                function oyoSpeakerButtonClick() {
+
+                }
+
+                // Event for empty button
+                function oyoEmptyButtonClick() {
+                    if (empty.state === 2) {
+                        empty.changeBackgroundColor("blue");
+                    } else {
+                        empty.changeBackgroundColor("black");
+                    }
+                }
+
+                function initPrevNext() {
+                    if (counter === 1) {
+                        previous.disable();
+                    } else {
+                        previous.enable();
+                    }
+                    if (counter === 3) {
+                        next.disable();
+                    } else {
+                        next.enable();
+                    }
+                }
+
+                function makeButtons() {
+
+                    play = new oyoButton("play");
+                    $(".panel").append(play);
+
+                    pause = new oyoButton("pause");
+                    $(".panel").append(pause);
+
+                    playpause = new oyoButton("playpause");
+                    $(".panel").append(playpause);
+                    //playpause.off();
+
+                    stop = new oyoButton("stop");
+                    $(".panel").append(stop);
+
+                    previous = new oyoButton("previous");
+                    $(".panel").append(previous);
+
+                    next = new oyoButton("next");
+                    $(".panel").append(next);
+
+                    record = new oyoButton("record");
+                    $(".panel").append(record);
+
+                    speaker = new oyoButton("speaker");
+                    //speaker.off();
+                    $(".panel").append(speaker);
+
+                    // Test button 1
+                    empty = new oyoButton("empty", 3);
+
+                    var circle = empty.createContentElement("circle");
+                    empty.displayStates(circle, [0, 1]);
+                    $(circle).attr("cx", 24.5);
+                    $(circle).attr("cy", 24.5);
+                    $(circle).attr("r", 25);
+                    var gradient = empty.radialGradient({"50%": "blue"});
+                    $(circle).attr("fill", gradient);
+                    $(empty.content).append(circle);
+
+                    var circle = empty.createContentElement("circle");
+                    empty.displayStates(circle, 1);
+                    $(circle).attr("cx", 24.5);
+                    $(circle).attr("cy", 24.5);
+                    $(circle).attr("r", 10);
+                    $(circle).attr("fill", "black");
+                    $(empty.content).append(circle);
+
+                    var circle = empty.createContentElement("circle");
+                    empty.displayStates(circle, 2);
+                    $(circle).attr("cx", 24.5);
+                    $(circle).attr("cy", 24.5);
+                    $(circle).attr("r", 25);
+                    var gradient = empty.radialGradient({"25%": "red", "50%": "green", "100%": "blue"});
+                    $(circle).attr("fill", gradient);
+                    $(empty.content).append(circle);
+
+                    $(".panel").append(empty);
+
+                    // Test button 2
+                    colors = new oyoButton("colors", 7);
+
+                    var circle = colors.createContentElement("circle");
+                    colors.displayStates(circle, 0);
+                    $(circle).attr("cx", 24.5);
+                    $(circle).attr("cy", 24.5);
+                    $(circle).attr("r", 20);
+                    $(circle).attr("fill", "red");
+                    $(colors.content).append(circle);
+
+                    var circle = colors.createContentElement("circle");
+                    colors.displayStates(circle, 1);
+                    $(circle).attr("cx", 24.5);
+                    $(circle).attr("cy", 24.5);
+                    $(circle).attr("r", 20);
+                    $(circle).attr("fill", "darkorange");
+                    $(colors.content).append(circle);
+
+                    var circle = colors.createContentElement("circle");
+                    colors.displayStates(circle, 2);
+                    $(circle).attr("cx", 24.5);
+                    $(circle).attr("cy", 24.5);
+                    $(circle).attr("r", 20);
+                    $(circle).attr("fill", "yellow");
+                    $(colors.content).append(circle);
+
+                    var circle = colors.createContentElement("circle");
+                    colors.displayStates(circle, 3);
+                    $(circle).attr("cx", 24.5);
+                    $(circle).attr("cy", 24.5);
+                    $(circle).attr("r", 20);
+                    $(circle).attr("fill", "green");
+                    $(colors.content).append(circle);
+
+                    var circle = colors.createContentElement("circle");
+                    colors.displayStates(circle, 4);
+                    $(circle).attr("cx", 24.5);
+                    $(circle).attr("cy", 24.5);
+                    $(circle).attr("r", 20);
+                    $(circle).attr("fill", "blue");
+                    $(colors.content).append(circle);
+
+                    var circle = colors.createContentElement("circle");
+                    colors.displayStates(circle, 5);
+                    $(circle).attr("cx", 24.5);
+                    $(circle).attr("cy", 24.5);
+                    $(circle).attr("r", 20);
+                    $(circle).attr("fill", "darkblue");
+                    $(colors.content).append(circle);
+
+                    var circle = colors.createContentElement("circle");
+                    colors.displayStates(circle, 6);
+                    $(circle).attr("cx", 24.5);
+                    $(circle).attr("cy", 24.5);
+                    $(circle).attr("r", 20);
+                    $(circle).attr("fill", "darkviolet");
+                    $(colors.content).append(circle);
+
+                    $(".panel").append(colors);
+
+                }
+
+                //empty.changeBackgroundColor("pink");
+                //speaker.changeBackgroundColor("red");
+                //speaker.changeFillColor("red");
+                //speaker.changeBorderColor("red", "blue");
+                //speaker.resetColors();
+
+            });
+        </script>
+        <div class="wrapper">
+            <div class="panel"></div>
+            <div class="notification">
+                <div class="text"></div>
+            </div>
+        </div>
+
+    </body>
+</html>
