@@ -9,15 +9,6 @@
  * oyobuttons is a set of buttons to control media, free buttons included
  */
 
-(function () {
-    var src = $("script").last().attr("src");
-    var link = document.createElement("link");
-    $(link).attr("rel", "stylesheet");
-    var href = src.substring(0, src.length - 3) + ".css";
-    $(link).attr("href", href);
-    $("head").append(link);
-})();
-
 function oyoButton(buttonType, states) {
     var svgNS = 'http://www.w3.org/2000/svg';
 
