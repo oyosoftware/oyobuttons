@@ -318,10 +318,12 @@ function oyoButton(buttonType, states) {
 
     button.enable = function () {
         button.disabled = false;
+        $(button).css("cursor", "pointer");
     };
 
     button.disable = function () {
         button.disabled = true;
+        $(button).css("cursor", "default");
     };
 
     button.changeBackgroundColor = function (color) {
