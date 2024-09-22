@@ -1,9 +1,9 @@
 /*!
- * oyobuttons.js 1.0
+ * oyobuttons.js 2.0
  * tested with jQuery 3.4.0
  * http://www.oyoweb.nl
  *
- * © 2021 oYoSoftware
+ * © 2021-2024 oYoSoftware
  * MIT License
  *
  * oyobuttons is a set of buttons to control media, free buttons included
@@ -18,7 +18,13 @@ function oyoButton(buttonType, states) {
 
     var button = document.createElement("button");
     $(button).addClass("oyobutton");
+    $(button).css("outline", "0px");
+    $(button).css("border", "2px solid");
+    $(button).css("border-radius", "30px");
+    $(button).css("padding", "3px");
     $(button).css("background-color", "black");
+    $(button).css("margin", "2px");
+    $(button).css("overflow", "hidden");
 
     if (buttonType === "") {
         buttonType = "empty";
@@ -33,6 +39,7 @@ function oyoButton(buttonType, states) {
     $(button.content).css("width", 50 + "px");
     $(button.content).css("height", 50 + "px");
     $(button.content).css("fill", "black");
+    $(button.content).css("border-radius", "25px");
     $(button).append(button.content);
 
     switch (true) {
@@ -210,12 +217,18 @@ function oyoButton(buttonType, states) {
     $(button).on("mouseup", mouseUp);
     $(button).on("click", click);
 
-    function mouseDown(event) {
+    function mouseDown() {
         $(button).css("border-color", button.borderColorsActive);
+        $(button.content).css("position", "relative");
+        $(button.content).css("left", "1px");
+        $(button.content).css("top", "1px");
     }
 
-    function mouseUp(event) {
+    function mouseUp() {
         $(button).css("border-color", button.borderColors);
+        $(button.content).css("position", "static");
+        $(button.content).css("left", "");
+        $(button.content).css("top", "");
     }
 
     function click() {
@@ -319,11 +332,15 @@ function oyoButton(buttonType, states) {
     button.enable = function () {
         button.disabled = false;
         $(button).css("cursor", "pointer");
+        $(button).css("border-color", defaultBorderColors);
+        $(button).css("opacity", "1");
     };
 
     button.disable = function () {
         button.disabled = true;
         $(button).css("cursor", "default");
+        $(button).css("border-color", "red");
+        $(button).css("opacity", "0.5");
     };
 
     button.changeBackgroundColor = function (color) {
