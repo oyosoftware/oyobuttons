@@ -332,14 +332,12 @@ function oyoButton(buttonType, states) {
     button.enable = function () {
         button.disabled = false;
         $(button).css("cursor", "pointer");
-        $(button).css("border-color", defaultBorderColors);
         $(button).css("opacity", "1");
     };
 
     button.disable = function () {
         button.disabled = true;
         $(button).css("cursor", "default");
-        $(button).css("border-color", "red");
         $(button).css("opacity", "0.5");
     };
 
